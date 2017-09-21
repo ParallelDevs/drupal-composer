@@ -1,11 +1,50 @@
 {
 	"name": "paralleldevs/drupal-composer",
+	"description": "Project template for Drupal 8 projects with composer",
+	"type": "project",
 	"license": "GPL-2.0+",
+	"minimum-stability": "dev",
+    "prefer-stable": true,
     "authors": [
         {
             "name": "Daniel Noyola",
             "email": "danielnv18@gmail.com"
         }
+	],
+	"repositories": [
+        {
+            "type": "composer",
+            "url": "https://packages.drupal.org/8"
+        }
     ],
-    "require": {}
+	"require": {
+		"drupal-composer/drupal-scaffold": "^2.3",
+		"cweagans/composer-patches": "^1.6"
+	},
+	"config": {
+        "bin-dir": "bin/"
+    },
+	"extra": {
+        "installer-paths": {
+            "web/core": [
+                "type:drupal-core"
+            ],
+            "web/libraries/{$name}": [
+                "type:drupal-library"
+            ],
+            "web/modules/contrib/{$name}": [
+                "type:drupal-module"
+            ],
+            "web/profiles/contrib/{$name}": [
+                "type:drupal-profile"
+            ],
+            "web/themes/contrib/{$name}": [
+                "type:drupal-theme"
+            ],
+            "drush/contrib/{$name}": [
+                "type:drupal-drush"
+            ]
+        },
+        "enable-patching": true
+    }
 }
