@@ -1,0 +1,11 @@
+{
+	"name": "paralleldevs/drupal-composer",
+	"license": "GPL-2.0+",
+    "authors": [
+        {
+            "name": "Daniel Noyola",
+            "email": "danielnv18@gmail.com"
+        }
+    ],
+    "require": {}
+}
