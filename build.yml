@@ -1,0 +1,121 @@
+##
+# Build and command-line operations containers for your local environment.
+#
+# @see https://docs.docker.com/compose/reference/overview/
+# @see https://docs.docker.com/compose/compose-file/compose-file-v2/
+##
+version: '2.1'
+
+services:
+  # Container for starting a cli for build commands
+  # Usage: docker-compose -f build.yml run --rm cli
+  cli:
+    extends:
+      service: operational
+    command: /bin/bash
+
+  # Container for composer commands
+  # Usage: docker-compose -f build.yml run --rm composer <command>
+  composer:
+    extends:
+      service: base
+    entrypoint: [ "/init", "composer", "--ansi" ]
+    command: ""
+
+  # Container for running drush in the docroot.
+  # Usage: docker-compose -f build.yml run --rm drush <command>
+  # Where <command> is a direct drush command like cache-rebuild
+  drush:
+    extends:
+      service: operational
+    entrypoint: [ "/init", "drush", "--root=/var/www/web", "--uri=www.drupal8.vm" ]
+
+  # Container for running Drupal Console in the docroot.
+  # Usage: docker-compose -f build.yml run --rm drupal <command>
+  # Where <command> is a direct drupal command like generate
+  # Note: Only works if the project includes Drupal Console as a composer dependency.
+  drupal:
+    extends:
+      service: operational
+    entrypoint: [ "/init", "/var/www/vendor/bin/drupal", "--ansi" ]
+    working_dir: /var/www/web
+
+  # Container for running PHPUnit tests.
+  # Usage: docker-compose -f build.yml run --rm phpunit <phpunit parameters>
+  # E.g. docker-compose -f build.yml run --rm phpunit -c ./core/phpunit.xml.dist ./modules/custom
+  phpunit:
+    extends:
+      service: operational
+    entrypoint: [ "/init", "/var/www/vendor/bin/phpunit" ]
+    working_dir: /var/www/web
+
+  # Operational base service definition for Local environment.
+  #
+  # Unlike `base`, this layer is functional for application interactions.
+  #
+  # Other services inherit these settings via the extends property.
+  # See https://docs.docker.com/compose/extends/#extending-services
+  operational:
+    extends:
+      service: base
+    external_links:
+      - drupal8_${DOCKER_ENV:-local}_db:db
+    command: ""
+
+  # Base service definition for Local environment.
+  #
+  # This is not a fully operational build container, lacking access to other
+  # services such as the database or cache needed to properly interact with the
+  # application.
+  #
+  # Uses for this container include filesystem operations. For example:
+  #
+  # docker-compose -f build.yml run --rm base 'rm -Rf node_modules'
+  #
+  # Other services inherit these settings via the extends property.
+  # See https://docs.docker.com/compose/extends/#extending-services
+  base:
+    image: outrigger/build:php71
+    network_mode: "bridge"
+    entrypoint: [ "/init" ]
+    working_dir: /var/www
+    command: /bin/bash
+    environment:
+      # Check https://hub.docker.com/r/outrigger/build for other Node version options.
+      NODE_VERSION: 6
+      # Set to "true" to load xdebug configuration.
+      PHP_XDEBUG: "false"
+      # Centralized build cache configuration.
+      # This might move to the Docker build image.
+      NPM_CONFIG_CACHE: /root/.cache/npm
+      COMPOSER_CACHE_DIR: /root/.cache/composer
+      # PHPUnit variables.
+      SIMPLETEST_DB: mysql://admin:admin@db/drupal8_drupal
+      SIMPLETEST_URL: www.drupal8.vm
+      BROWSERTEST_OUTPUT_DIRECTORY: /tmp
+    labels:
+      # Unified lookup label for all containers for this project.
+      outrigger.project: drupal8
+    volumes:
+      # Use 'rig project sync' to leverage unison-based filesystem for app code.
+      # @see <doc-url>
+      - drupal8-sync:/var/www
+      # Drupal files directory.
+      - /data/drupal8/files:/var/www/web/sites/default/files
+      # Persist the cache directories associated with various tools.
+      # The first volume mount covers: npm, composer, bower, fontconfig, & yarn
+      - /data/drupal8_${DOCKER_ENV:-local}/cache:/root/.cache
+      - /data/drupal8_${DOCKER_ENV:-local}/cache/drush:/root/.drush/cache
+      # Preserve BASH history across build container runs.
+      - /data/drupal8_${DOCKER_ENV:-local}/bash:/root/bash
+      # Uncomment this if you need to access private repositories, adjust to match your private key file location
+      # If you need to use an SSH key filename that is different from id_rsa, set it with:
+      # export OUTRIGGER_SHSH_KEY=drupal8_id_rsa
+      # ~/.ssh/${OUTRIGGER_SSH_KEY:-id_rsa}:/root/.ssh/outrigger.key
+
+volumes:
+  # This defines the filesystem synchronization volume used for application
+  # code by the web container.
+  # @see <doc-url>
+  drupal8-sync:
+    external: true

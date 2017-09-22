@@ -1,0 +1,62 @@
+##
+# Operational services to run the application in your local environment.
+#
+# @see https://docs.docker.com/compose/reference/overview/
+# @see https://docs.docker.com/compose/compose-file/compose-file/
+##
+version: '3.3'
+
+services:
+  # Container to run Apache/PHP
+  www:
+    image: outrigger/apache-php:php71
+    container_name: drupal8_${DOCKER_ENV:-local}_www
+    network_mode: "bridge"
+    environment:
+      DOCROOT: /var/www/web
+      # Change some core container settings
+      PHP_MAX_EXECUTION_TIME: 45
+      # These enable debug/profiling support
+      PHP_XDEBUG: "false"
+    labels:
+      # The dnsdock labels make this container referenceable by www.drupal8.vm
+      # It is recommended that your com.dnsdock.name match your container name
+      com.dnsdock.name: "www"
+      com.dnsdock.image: "drupal8"
+      # Unified lookup label for all containers for this project.
+      outrigger.project: drupal8
+    # Links become entries in container /etc/hosts We can refer to the
+    # database host as db instead of db.d8.vm or IP address
+    links:
+      - db
+    # These src:dest pairs get mapped into the container at the
+    # dest path and override what was built into the image. Both
+    # a directory and an individual file can be overridden.
+    #
+    # Relative src paths and absolute ones pointing inside your home
+    # directory will pull in contents from your host machine.
+    #
+    # Paths using /data are persistent and shared within the docker
+    # machine so they should be namespaced (the value of
+    # com.dnsdock.image) was used in this case to create a base of /data/d8
+    volumes:
+      # Main code volume mount.
+      - .:/var/www
+      - /data/drupal8_${DOCKER_ENV:-local}/files:/var/www/web/sites/default/files
+
+  # Container to run our database
+  db:
+    image: outrigger/mariadb:10.1
+    container_name: drupal8_${DOCKER_ENV:-local}_db
+    network_mode: "bridge"
+    environment:
+      MYSQL_DATABASE: drupal8_drupal
+    labels:
+      # The dnsdock labels make this container referenceable by db.d8.vm
+      # It is recommended that your com.dnsdock.name match your container name
+      com.dnsdock.name: "db"
+      com.dnsdock.image: "drupal8"
+      # Unified lookup label for all containers for this project.
+      outrigger.project: drupal8
+    volumes:
+      - /data/drupal8_${DOCKER_ENV:-local}/mysql:/var/lib/mysql
