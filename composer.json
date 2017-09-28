@@ -33,12 +33,27 @@
     "drupal/core": "~8.0",
     "paralleldevs/quick_start": "8.x-dev"
   },
+  "conflict": {
+    "drupal/drupal": "*"
+  },
+  "autoload": {
+    "classmap": [
+      "scripts/composer/ScriptHandler.php"
+    ]
+  },
   "scripts": {
+    "drupal-scaffold": "DrupalComposer\\DrupalScaffold\\Plugin::scaffold",
+    "pre-install-cmd": [
+      "DrupalProject\\composer\\ScriptHandler::checkComposerVersion"
+    ],
+    "pre-update-cmd": [
+      "DrupalProject\\composer\\ScriptHandler::checkComposerVersion"
+    ],
     "post-install-cmd": [
-      "DrupalComposer\\DrupalScaffold\\Plugin::scaffold"
+      "DrupalProject\\composer\\ScriptHandler::createRequiredFiles"
     ],
     "post-update-cmd": [
-      "DrupalComposer\\DrupalScaffold\\Plugin::scaffold"
+      "DrupalProject\\composer\\ScriptHandler::createRequiredFiles"
     ]
   },
   "config": {
