@@ -1,65 +1,70 @@
 {
-	"name": "paralleldevs/drupal-composer",
-	"description": "Project template for Drupal 8 projects with composer",
-	"type": "project",
-	"license": "GPL-2.0+",
-	"minimum-stability": "dev",
-    "prefer-stable": true,
-    "authors": [
-        {
-            "name": "Daniel Noyola",
-            "email": "danielnv18@gmail.com"
-        }
-	],
-	"repositories": [
-        {
-            "type": "composer",
-            "url": "https://packages.drupal.org/8"
-        }
-	],
-	"require-dev": {
-		"drupal/coder": "^8.2",
-		"drupal/console": "^1.0.1",
-		"drush/drush": "~8.0"
-	},
-	"require": {
-		"drupal-composer/drupal-scaffold": "^2.3",
-		"cweagans/composer-patches": "^1.6",
-		"composer/installers": "^1.4",
-		"drupal/core": "~8.0"
-	},
-	"scripts": {
-		"post-install-cmd": [
-			"DrupalComposer\\DrupalScaffold\\Plugin::scaffold"
-		],
-		"post-update-cmd": [
-			"DrupalComposer\\DrupalScaffold\\Plugin::scaffold"
-		]
-	},
-	"config": {
-		"sort-packages": true
-    },
-	"extra": {
-        "installer-paths": {
-            "web/core": [
-                "type:drupal-core"
-            ],
-            "web/libraries/{$name}": [
-                "type:drupal-library"
-            ],
-            "web/modules/contrib/{$name}": [
-                "type:drupal-module"
-            ],
-            "web/profiles/contrib/{$name}": [
-                "type:drupal-profile"
-            ],
-            "web/themes/contrib/{$name}": [
-                "type:drupal-theme"
-            ],
-            "drush/contrib/{$name}": [
-                "type:drupal-drush"
-            ]
-        },
-        "enable-patching": true
+  "name": "paralleldevs/drupal-composer",
+  "description": "Project template for Drupal 8 projects with composer",
+  "type": "project",
+  "license": "GPL-2.0+",
+  "minimum-stability": "dev",
+  "prefer-stable": true,
+  "authors": [
+    {
+      "name": "Daniel Noyola",
+      "email": "danielnv18@gmail.com"
     }
+  ],
+  "repositories": [
+    {
+      "type": "composer",
+      "url": "https://packages.drupal.org/8"
+    },
+    {
+      "type": "vcs",
+      "url": "https://github.com/ParallelDevs/quick_start.git"
+    }
+  ],
+  "require-dev": {
+    "drupal/coder": "^8.2",
+    "drupal/console": "^1.0.1",
+    "drush/drush": "~8.0"
+  },
+  "require": {
+    "composer/installers": "^1.4",
+    "cweagans/composer-patches": "^1.6",
+    "drupal-composer/drupal-scaffold": "^2.3",
+    "drupal/core": "~8.0",
+    "paralleldevs/quick_start": "8.x-dev"
+  },
+  "scripts": {
+    "post-install-cmd": [
+      "DrupalComposer\\DrupalScaffold\\Plugin::scaffold"
+    ],
+    "post-update-cmd": [
+      "DrupalComposer\\DrupalScaffold\\Plugin::scaffold"
+    ]
+  },
+  "config": {
+    "sort-packages": true
+  },
+  "extra": {
+    "installer-paths": {
+      "web/core": [
+        "type:drupal-core"
+      ],
+      "web/libraries/{$name}": [
+        "type:drupal-library"
+      ],
+      "web/modules/contrib/{$name}": [
+        "type:drupal-module"
+      ],
+      "web/profiles/contrib/{$name}": [
+        "type:drupal-profile"
+      ],
+      "web/themes/contrib/{$name}": [
+        "type:drupal-theme"
+      ],
+      "drush/contrib/{$name}": [
+        "type:drupal-drush"
+      ]
+    },
+    "enable-patching": true
+  }
 }
