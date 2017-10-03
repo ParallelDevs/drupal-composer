@@ -1,6 +1,6 @@
 # Drupal Composer
 
-Use [Composer](https://getcomposer.org/) to get Drupal + Commerce 2.x with all dependencies.
+Use [Composer](https://getcomposer.org/) to get Drupal + Lightning 2.x with all dependencies.
 
 Based on [drupal-composer/drupal-project](https://github.com/drupal-composer/drupal-project)
 
