@@ -15,9 +15,9 @@ services:
     environment:
       DOCROOT: /var/www/web
       # Change some core container settings
-      PHP_MAX_EXECUTION_TIME: 45
+      PHP_MAX_EXECUTION_TIME: 60
       # These enable debug/profiling support
-      PHP_XDEBUG: "false"
+      PHP_XDEBUG: "true"
     labels:
       # The dnsdock labels make this container referenceable by www.drupal8.vm
       # It is recommended that your com.dnsdock.name match your container name
@@ -42,7 +42,7 @@ services:
     volumes:
       # Main code volume mount.
       - .:/var/www
-      - /data/drupal8_${DOCKER_ENV:-local}/files:/var/www/web/sites/default/files
+      - /data/drupal8/${DOCKER_ENV:-local}/files:/var/www/web/sites/default/files
 
   # Container to run our database
   db:
@@ -59,4 +59,4 @@ services:
       # Unified lookup label for all containers for this project.
       outrigger.project: drupal8
     volumes:
-      - /data/drupal8_${DOCKER_ENV:-local}/mysql:/var/lib/mysql
+      - /data/drupal8/${DOCKER_ENV:-local}/mysql:/var/lib/mysql

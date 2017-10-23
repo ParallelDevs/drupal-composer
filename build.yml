@@ -104,10 +104,10 @@ services:
       - /data/drupal8/files:/var/www/web/sites/default/files
       # Persist the cache directories associated with various tools.
       # The first volume mount covers: npm, composer, bower, fontconfig, & yarn
-      - /data/drupal8_${DOCKER_ENV:-local}/cache:/root/.cache
-      - /data/drupal8_${DOCKER_ENV:-local}/cache/drush:/root/.drush/cache
+      - /data/drupal8/${DOCKER_ENV:-local}/cache:/root/.cache
+      - /data/drupal8/${DOCKER_ENV:-local}/cache/drush:/root/.drush/cache
       # Preserve BASH history across build container runs.
-      - /data/drupal8_${DOCKER_ENV:-local}/bash:/root/bash
+      - /data/drupal8/${DOCKER_ENV:-local}/bash:/root/bash
       # Uncomment this if you need to access private repositories, adjust to match your private key file location
       # If you need to use an SSH key filename that is different from id_rsa, set it with:
       # export OUTRIGGER_SHSH_KEY=drupal8_id_rsa
