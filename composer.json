@@ -19,6 +19,10 @@
     {
       "type": "vcs",
       "url": "https://github.com/ParallelDevs/quick_start.git"
+    },
+    {
+      "type": "composer",
+      "url": "https://asset-packagist.org"
     }
   ],
   "require-dev": {
