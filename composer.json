@@ -18,7 +18,7 @@
     },
     {
       "type": "vcs",
-      "url": "https://github.com/ParallelDevs/quick_start.git"
+      "url": "https://github.com/ParallelDevs/quickstart.git"
     },
     {
       "type": "composer",
@@ -44,7 +44,7 @@
     "drupal-composer/drupal-scaffold": "^2.0.0",
     "cweagans/composer-patches": "^1.6.0",
     "drupal/core": "~8.4.0",
-    "paralleldevs/quick_start": "8.x-dev"
+    "paralleldevs/quickstart": "8.x-dev"
   },
   "conflict": {
     "drupal/drupal": "*"
