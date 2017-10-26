@@ -58,6 +58,13 @@ class ScriptHandler {
       umask($oldmask);
       $event->getIO()->write("Create a sites/default/files directory with chmod 777");
     }
+  }
+
+  public static function initProject(Event $event) {
+    $fs = new Filesystem();
+    $drupalFinder = new DrupalFinder();
+    $drupalFinder->locateRoot(getcwd());
+    $drupalRoot = $drupalFinder->getDrupalRoot();
 
     // Git init
     if (!$fs->exists($drupalRoot . '/../.git')) {
@@ -74,7 +81,6 @@ class ScriptHandler {
         $fs->symlink('git-hooks/', '.git/hooks', true);
       }
     }
-
   }
 
   /**

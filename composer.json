@@ -63,6 +63,9 @@
     ],
     "post-update-cmd": [
       "Paralleldevs\\composer\\ScriptHandler::createRequiredFiles"
+    ],
+    "post-create-project-cmd": [
+      "Paralleldevs\\composer\\ScriptHandler::initProject"
     ]
   },
   "config": {
