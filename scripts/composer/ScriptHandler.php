@@ -67,19 +67,19 @@ class ScriptHandler {
     $drupalRoot = $drupalFinder->getDrupalRoot();
 
     // Git init
-    if (!$fs->exists($drupalRoot . '/../.git')) {
-      $shell_response = shell_exec('git init');
-      $event->getIO()->write($shell_response);
+    $shell_response = shell_exec('git init');
+    $event->getIO()->write($shell_response);
 
-      $shell_response = shell_exec('git add ./');
-      $event->getIO()->write($shell_response);
+    $shell_response = shell_exec('git add ./');
+    $event->getIO()->write($shell_response);
 
-      $shell_response = shell_exec('git commit -am "Initial Commit" ');
-      $event->getIO()->write($shell_response);
+    $shell_response = shell_exec('git commit -am "Initial Commit" ');
+    $event->getIO()->write($shell_response);
 
-      if (!$fs->exists($drupalRoot . '/../.git')) {
-        $fs->symlink('git-hooks/', '.git/hooks', true);
-      }
+    $fs->remove($drupalRoot . '/../.git/hooks');
+
+    if ($fs->exists($drupalRoot . '/../.git')) {
+      $fs->symlink('git-hooks/', '.git/hooks', TRUE);
     }
   }
 
