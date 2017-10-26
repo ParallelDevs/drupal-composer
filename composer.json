@@ -53,10 +53,10 @@
   "scripts": {
     "drupal-scaffold": "DrupalComposer\\DrupalScaffold\\Plugin::scaffold",
     "pre-install-cmd": [
-      "DrupalProject\\composer\\ScriptHandler::checkComposerVersion"
+      "Paralleldevs\\composer\\ScriptHandler::checkComposerVersion"
     ],
     "pre-update-cmd": [
-      "DrupalProject\\composer\\ScriptHandler::checkComposerVersion"
+      "Paralleldevs\\composer\\ScriptHandler::checkComposerVersion"
     ],
     "post-install-cmd": [
       "Paralleldevs\\composer\\ScriptHandler::createRequiredFiles"
