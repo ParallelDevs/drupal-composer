@@ -56,8 +56,25 @@ class ScriptHandler {
       $oldmask = umask(0);
       $fs->mkdir($drupalRoot . '/sites/default/files', 0777);
       umask($oldmask);
-      $event->getIO()->write("Create a sites/default/files directory with chmod 0777");
+      $event->getIO()->write("Create a sites/default/files directory with chmod 777");
     }
+
+    // Git init
+    if (!$fs->exists($drupalRoot . '/../.git')) {
+      $shell_response = shell_exec('git init');
+      $event->getIO()->write($shell_response);
+
+      $shell_response = shell_exec('git add ./');
+      $event->getIO()->write($shell_response);
+
+      $shell_response = shell_exec('git commit -am "Initial Commit" ');
+      $event->getIO()->write($shell_response);
+
+      if (!$fs->exists($drupalRoot . '/../.git')) {
+        $fs->symlink('git-hooks/', '.git/hooks', true);
+      }
+    }
+
   }
 
   /**

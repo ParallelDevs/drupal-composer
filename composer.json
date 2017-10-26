@@ -17,10 +17,6 @@
       "url": "https://packages.drupal.org/8"
     },
     {
-      "type": "vcs",
-      "url": "https://github.com/ParallelDevs/quickstart.git"
-    },
-    {
       "type": "composer",
       "url": "https://asset-packagist.org"
     }
@@ -41,10 +37,10 @@
     "drupal/console": "1.0.1"
   },
   "require": {
-    "drupal-composer/drupal-scaffold": "^2.0.0",
     "cweagans/composer-patches": "^1.6.0",
+    "drupal-composer/drupal-scaffold": "^2.0.0",
     "drupal/core": "~8.4.0",
-    "paralleldevs/quickstart": "8.x-dev"
+    "paralleldevs/quickstart": "^0.3.0"
   },
   "conflict": {
     "drupal/drupal": "*"
