@@ -5,7 +5,7 @@
  * Contains \DrupalProject\composer\ScriptHandler.
  */
 
-namespace DrupalProject\composer;
+namespace Paralleldevs\composer;
 
 use Composer\Script\Event;
 use Composer\Semver\Comparator;
