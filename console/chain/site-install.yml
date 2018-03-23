@@ -1,0 +1,44 @@
+command:
+  name: project:install
+  description: 'Install the project with the all the config.'
+commands:
+  # Install Drupal
+  - command: site:install
+    options:
+      langcode: en
+      db-type: '%env(DATABASE_TYPE)%'
+      db-host: '%env(DATABASE_HOST)%'
+      db-name: '%env(DATABASE_NAME)%'
+      db-user: '%env(DATABASE_USER)%'
+      db-pass: '%env(DATABASE_PASSWORD)%'
+      db-port: '%env(DATABASE_PORT)%'
+      site-name: 'Costa Rica Coopera'
+      site-mail: info@example.com
+      account-name: admin
+      account-mail: admin@example.com
+      account-pass: admin
+      force: true
+      no-interaction: true
+    arguments:
+      profile: 'coopera_base'
+  - command: config:override
+    options:
+      quiet: true
+      uri: 'http://default'
+    arguments:
+      name: system.site
+      key: uuid
+      value: '2c4451a5-229a-43d5-b72a-a35e68fda355'
+  - command: entity:delete
+    options:
+      uri: 'http://default'
+      quiet: true
+    arguments:
+      entity-definition-id: shortcut_set
+      entity-id: default
+  # Import configurations
+  - command: config:import
+   # Rebuild caches
+  - command: cache:rebuild
+    arguments:
+        cache: 'all'

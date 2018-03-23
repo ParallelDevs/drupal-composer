@@ -5,7 +5,7 @@
  * Contains \DrupalProject\composer\ScriptHandler.
  */
 
-namespace Paralleldevs\composer;
+namespace Paralleldevs\DrupalComposer;
 
 use Composer\Script\Event;
 use Composer\Semver\Comparator;
@@ -29,57 +29,46 @@ class ScriptHandler {
 
     // Required for unit testing
     foreach ($dirs as $dir) {
-      if (!$fs->exists($drupalRoot . '/'. $dir)) {
-        $fs->mkdir($drupalRoot . '/'. $dir);
-        $fs->touch($drupalRoot . '/'. $dir . '/.gitkeep');
+      if (!$fs->exists($drupalRoot . '/' . $dir)) {
+        $fs->mkdir($drupalRoot . '/' . $dir);
+        $fs->touch($drupalRoot . '/' . $dir . '/.gitkeep');
       }
+    }
+
+    // Env
+    if (!$fs->exists($drupalFinder->getComposerRoot() . '/.env') && $fs->exists($drupalFinder->getComposerRoot() . '/.env.dist')) {
+      $fs->copy($drupalFinder->getComposerRoot() . '/.env.dist',
+        $drupalFinder->getComposerRoot() . '/.env');
     }
 
     // Prepare the settings file for installation
     if (!$fs->exists($drupalRoot . '/sites/default/settings.php') and $fs->exists($drupalRoot . '/sites/default/default.settings.php')) {
-      $fs->copy($drupalRoot . '/sites/default/default.settings.php', $drupalRoot . '/sites/default/settings.php');
+      $fs->copy($drupalRoot . '/sites/default/default.settings.php',
+        $drupalRoot . '/sites/default/settings.php');
       require_once $drupalRoot . '/core/includes/bootstrap.inc';
       require_once $drupalRoot . '/core/includes/install.inc';
       $settings['config_directories'] = [
         CONFIG_SYNC_DIRECTORY => (object) [
-          'value' => Path::makeRelative($drupalFinder->getComposerRoot() . '/config/sync', $drupalRoot),
+          'value' => Path::makeRelative($drupalFinder->getComposerRoot() . '/config/sync',
+            $drupalRoot),
           'required' => TRUE,
         ],
       ];
-      drupal_rewrite_settings($settings, $drupalRoot . '/sites/default/settings.php');
+      drupal_rewrite_settings($settings,
+        $drupalRoot . '/sites/default/settings.php');
       $fs->chmod($drupalRoot . '/sites/default/settings.php', 0666);
-      $event->getIO()->write("Create a sites/default/settings.php file with chmod 0666");
+      $event->getIO()
+        ->write("Create a sites/default/settings.php file with chmod 0666");
     }
 
     // Create the files directory with chmod 0777
     if (!$fs->exists($drupalRoot . '/sites/default/files')) {
       $oldmask = umask(0);
       $fs->mkdir($drupalRoot . '/sites/default/files', 0777);
+      $fs->mkdir($drupalRoot . '/sites/default/files/private', 0777);
       umask($oldmask);
-      $event->getIO()->write("Create a sites/default/files directory with chmod 777");
-    }
-  }
-
-  public static function initProject(Event $event) {
-    $fs = new Filesystem();
-    $drupalFinder = new DrupalFinder();
-    $drupalFinder->locateRoot(getcwd());
-    $drupalRoot = $drupalFinder->getDrupalRoot();
-
-    // Git init
-    $shell_response = shell_exec('git init');
-    $event->getIO()->write($shell_response);
-
-    $shell_response = shell_exec('git add ./');
-    $event->getIO()->write($shell_response);
-
-    $shell_response = shell_exec('git commit -am "Initial Commit" ');
-    $event->getIO()->write($shell_response);
-
-    $fs->remove($drupalRoot . '/../.git/hooks');
-
-    if ($fs->exists($drupalRoot . '/../.git')) {
-      $fs->symlink('git-hooks/', '.git/hooks', TRUE);
+      $event->getIO()
+        ->write("Create a sites/default/files directory with chmod 0777");
     }
   }
 
