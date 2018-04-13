@@ -19,8 +19,6 @@ application:
     type: 'ssh'
   options:
     learning: false
-#    target: 'site-alias.dev'
-#    uri: 'multi-site.dev'
     generate-inline: false
     generate-chain: false
   overrides:

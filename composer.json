@@ -29,8 +29,9 @@
     "cweagans/composer-patches": "^1.6",
     "drupal-composer/drupal-scaffold": "^2.2",
     "drupal/console": "^1.8.0",
+    "drupal/core": "^8.5",
     "drush/drush": "^9.0.0",
-    "paralleldevs/quickstart": "8.x-dev",
+    "paralleldevs/quickstart": "0.4.0",
     "symfony/dotenv": "~3.3|~4.0",
     "webflo/drupal-finder": "^1.0.0",
     "webmozart/path-util": "^2.3"
@@ -52,9 +53,11 @@
       "Paralleldevs\\DrupalComposer\\ScriptHandler::checkComposerVersion"
     ],
     "post-install-cmd": [
+      "@drupal-scaffold",
       "Paralleldevs\\DrupalComposer\\ScriptHandler::createRequiredFiles"
     ],
     "post-update-cmd": [
+      "@drupal-scaffold",
       "Paralleldevs\\DrupalComposer\\ScriptHandler::createRequiredFiles"
     ],
     "post-create-project-cmd": [
